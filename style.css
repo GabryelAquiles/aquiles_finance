@@ -1,165 +1,90 @@
-/* Configurações Globais */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+/* Fundo escuro com gradientes sutis em tom de Roxo Noturno */
 body {
-  background-color: #0f172a;
-  color: #f8fafc;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+    background-color: #08070b;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    background-image: 
+        radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(147, 51, 234, 0.04) 0%, transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
-/* Cartões Gerais */
-.card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+/* Painel com Efeito Glassmorphism (Vidro Fosco Arroxeado) */
+.glass-panel {
+    background: rgba(20, 16, 30, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(168, 85, 247, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
 }
 
-/* Tela de Login */
-.container-central {
-  width: 100%;
-  max-width: 400px;
+/* Botões com Efeito de Vidro Fosco & Hover Luminoso em Roxo Neon */
+.glass-button {
+    background: rgba(168, 85, 247, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #ffffff;
 }
 
-.login-card h1 {
-  font-size: 1.8rem;
-  margin-bottom: 8px;
-  color: #38bdf8;
-  text-align: center;
+.glass-button:hover {
+    background: rgba(168, 85, 247, 0.22);
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
+    transform: translateY(-1px);
 }
 
-.login-card p {
-  font-size: 0.9rem;
-  color: #94a3b8;
-  text-align: center;
-  margin-bottom: 24px;
+.glass-button:active {
+    transform: translateY(0);
+    background: rgba(168, 85, 247, 0.15);
 }
 
-.campo {
-  margin-bottom: 16px;
+/* Inputs com Vidro Escurecido e Foco Roxo */
+.glass-input {
+    background: rgba(10, 8, 16, 0.6);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    color: #ffffff;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.campo label {
-  display: block;
-  font-size: 0.85rem;
-  margin-bottom: 6px;
-  color: #cbd5e1;
+.glass-input:focus {
+    outline: none;
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
 }
 
-.campo input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #475569;
-  background-color: #0f172a;
-  color: #fff;
-  outline: none;
+/* Barra de rolagem estilizada em tom Roxo/Escuro */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #08070b;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.25);
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.5);
 }
 
-.campo input:focus {
-  border-color: #38bdf8;
+/* Animação de pulso do indicador Open Finance em Roxo */
+@keyframes pulse-glow {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+    }
+    50% { 
+        opacity: 0.6; 
+        transform: scale(1.1);
+        box-shadow: 0 0 10px 2px rgba(168, 85, 247, 0.6);
+    }
 }
-
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #0284c7, #38bdf8);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-}
-
-/* Container Conteúdo do Amigo */
-.container-conteudo {
-  width: 100%;
-  max-width: 1000px;
-}
-
-.header-boas-vindas {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.header-boas-vindas h1 {
-  font-size: 2.2rem;
-  margin-bottom: 8px;
-}
-
-.header-boas-vindas span {
-  color: #38bdf8;
-}
-
-.header-boas-vindas p {
-  color: #94a3b8;
-}
-
-/* Layout em Grid */
-.grid-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.bloco-video {
-  grid-column: span 2;
-}
-
-.bloco-video h2, .bloco-poema h2, .bloco-musica h2 {
-  font-size: 1.2rem;
-  margin-bottom: 16px;
-  color: #38bdf8;
-}
-
-/* Responsividade do Iframe do YouTube */
-.video-responsive {
-  position: relative;
-  padding-bottom: 56.25%; /* Proporção 16:9 */
-  height: 0;
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.video-responsive iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* Estilo do Poema */
-.poema-conteudo {
-  white-space: pre-line;
-  line-height: 1.8;
-  font-size: 1rem;
-  color: #e2e8f0;
-  font-style: italic;
-}
-
-/* Responsividade Mobile */
-@media (max-width: 768px) {
-  .grid-layout {
-    grid-template-columns: 1fr;
-  }
-  
-  .bloco-video {
-    grid-column: span 1;
-  }
+.pulse-dot {
+    animation: pulse-glow 2s infinite ease-in-out;
 }

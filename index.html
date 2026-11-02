@@ -1,34 +1,394 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrar - Especial 3º Ano</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquiles Finance - Gestão Financeira Inteligente</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Configuração Customizada do Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        darkBg: '#09090b',
+                        darkCard: '#121215',
+                        darkBorder: 'rgba(255, 255, 255, 0.1)',
+                        neonGreen: '#10b981',
+                        neonRed: '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Estilos Customizados -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="antialiased pb-12">
 
-  <main class="container-central">
-    <div class="card login-card">
-      <h1>Especial 3º Ano 🎓</h1>
-      <p>Digite seu apelido e senha para ver sua homenagem.</p>
-      
-      <form id="form-login">
-        <div class="campo">
-          <label for="apelido">Seu Apelido</label>
-          <input type="text" id="apelido" placeholder="Ex: Pedrinho, Babi, Gabi..." required autocomplete="username">
-        </div>
-        
-        <div class="campo">
-          <label for="senha">Sua Senha</label>
-          <input type="text" id="senha" placeholder="Sua senha aqui" required autocomplete="off">
-        </div>
-
-        <button type="submit" class="btn-primary">Entrar</button>
-      </form>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-5 z-50 glass-panel px-4 py-3 rounded-xl border border-white/10 hidden items-center space-x-3 shadow-2xl transition-all duration-300">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-white text-base"></i>
+        <span id="toast-msg" class="text-xs sm:text-sm font-medium text-white">Ação realizada com sucesso!</span>
     </div>
-  </main>
 
-  <script type="module" src="script.js"></script>
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-black/70 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+            
+            <!-- Logo Aquiles Oficial -->
+            <div class="flex items-center space-x-2.5 sm:space-x-3">
+                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl glass-panel flex items-center justify-center border border-white/20 bg-black overflow-hidden p-1">
+                    <img src="logo.png" alt="Logo Aquiles" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-xl font-bold tracking-wider text-white uppercase flex items-center gap-1.5">
+                        Aquiles <span class="text-[10px] sm:text-xs font-light tracking-normal px-2 py-0.5 rounded-full border border-white/20 bg-white/5 text-zinc-300">Finance</span>
+                    </h1>
+                    <p class="text-[10px] sm:text-xs text-zinc-400 hidden sm:block">Controle & Inteligência Financeira</p>
+                </div>
+            </div>
+
+            <!-- Botão Sincronizar & Status -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-full glass-panel text-xs border border-white/10">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+                    <span class="text-zinc-300 font-medium">Open Finance: <span class="text-white">Conectado</span></span>
+                </div>
+
+                <button onclick="openSyncModal()" class="glass-button px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs font-medium flex items-center space-x-1.5">
+                    <i class="fa-solid fa-arrows-rotate text-zinc-300"></i>
+                    <span>Sincronizar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 space-y-4 sm:space-y-8">
+
+        <!-- CARDS DE MÉTRICAS (1 Coluna no Celular) -->
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
+            
+            <!-- Saldo Total -->
+            <div class="glass-panel p-4 sm:p-6 rounded-2xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2 sm:mb-4">
+                    <div>
+                        <p class="text-[10px] sm:text-xs font-medium text-zinc-400 uppercase tracking-wider">Saldo Total Atual</p>
+                        <h2 id="total-balance" class="text-2xl sm:text-3xl font-extrabold text-white mt-0.5 sm:mt-1">R$ 0,00</h2>
+                    </div>
+                    <div class="p-2.5 sm:p-3 rounded-xl glass-panel text-white">
+                        <i class="fa-solid fa-wallet text-base sm:text-xl"></i>
+                    </div>
+                </div>
+                <div class="flex items-center text-[10px] sm:text-xs text-zinc-400 space-x-2">
+                    <span class="text-white font-medium"><i class="fa-solid fa-lock text-emerald-400 mr-1"></i>Protegido</span>
+                    <span>• Em tempo real</span>
+                </div>
+            </div>
+
+            <!-- Entradas -->
+            <div class="glass-panel p-4 sm:p-6 rounded-2xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2 sm:mb-4">
+                    <div>
+                        <p class="text-[10px] sm:text-xs font-medium text-zinc-400 uppercase tracking-wider">Entradas do Mês</p>
+                        <h2 id="total-incomes" class="text-2xl sm:text-3xl font-extrabold text-white mt-0.5 sm:mt-1">R$ 0,00</h2>
+                    </div>
+                    <div class="p-2.5 sm:p-3 rounded-xl glass-panel text-emerald-400 border border-emerald-500/20 bg-emerald-500/10">
+                        <i class="fa-solid fa-arrow-trend-up text-base sm:text-xl"></i>
+                    </div>
+                </div>
+                <div class="flex items-center text-[10px] sm:text-xs text-zinc-400 space-x-2">
+                    <span class="text-emerald-400 font-semibold">Receitas</span>
+                    <span>• Proventos</span>
+                </div>
+            </div>
+
+            <!-- Saídas -->
+            <div class="glass-panel p-4 sm:p-6 rounded-2xl relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2 sm:mb-4">
+                    <div>
+                        <p class="text-[10px] sm:text-xs font-medium text-zinc-400 uppercase tracking-wider">Saídas do Mês</p>
+                        <h2 id="total-expenses" class="text-2xl sm:text-3xl font-extrabold text-white mt-0.5 sm:mt-1">R$ 0,00</h2>
+                    </div>
+                    <div class="p-2.5 sm:p-3 rounded-xl glass-panel text-rose-500 border border-rose-500/20 bg-rose-500/10">
+                        <i class="fa-solid fa-arrow-trend-down text-base sm:text-xl"></i>
+                    </div>
+                </div>
+                <div class="flex items-center text-[10px] sm:text-xs text-zinc-400 space-x-2">
+                    <span class="text-rose-400 font-semibold">Despesas</span>
+                    <span>• Gastos</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- GRÁFICOS (Ajustados para telas pequenas) -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div class="lg:col-span-2 glass-panel p-4 sm:p-6 rounded-2xl flex flex-col justify-between">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+                    <div>
+                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-chart-simple text-zinc-400"></i> Fluxo de Caixa
+                        </h3>
+                        <p class="text-[10px] sm:text-xs text-zinc-400">Comparativo mensal de Entradas vs Saídas</p>
+                    </div>
+                    <div class="flex items-center space-x-3 text-[11px]">
+                        <div class="flex items-center space-x-1">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span>
+                            <span class="text-zinc-300">Entradas</span>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span>
+                            <span class="text-zinc-300">Saídas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative w-full h-56 sm:h-80">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 sm:p-6 rounded-2xl flex flex-col justify-between">
+                <div class="mb-2 sm:mb-4">
+                    <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-zinc-400"></i> Categorias de Saídas
+                    </h3>
+                    <p class="text-[10px] sm:text-xs text-zinc-400">Distribuição dos seus gastos</p>
+                </div>
+                <div class="relative w-full h-52 sm:h-64 flex items-center justify-center">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <p id="no-category-msg" class="text-center text-[10px] sm:text-xs text-zinc-500 mt-2 hidden">
+                    Nenhuma despesa cadastrada para exibir o gráfico.
+                </p>
+            </div>
+        </section>
+
+        <!-- EXTRATO E FILTROS -->
+        <section class="glass-panel rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-zinc-400"></i> Extrato de Transações
+                    </h3>
+                    <p class="text-[10px] sm:text-xs text-zinc-400">Gerencie entradas e saídas do sistema</p>
+                </div>
+
+                <button onclick="openTransactionModal()" class="glass-button px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 bg-white/10 w-full sm:w-auto">
+                    <i class="fa-solid fa-plus text-white"></i>
+                    <span>Novo Lançamento</span>
+                </button>
+            </div>
+
+            <!-- Barra de Filtros em Grade Adaptável -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 pt-2 border-t border-white/5">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs"></i>
+                    <input type="text" id="search-input" oninput="filterTransactions()" placeholder="Buscar por descrição..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl glass-input text-white">
+                </div>
+
+                <div>
+                    <select id="filter-type" onchange="filterTransactions()" class="w-full px-3 py-2 text-xs rounded-xl glass-input text-white">
+                        <option value="all" class="bg-zinc-900 text-white">Todos os Tipos</option>
+                        <option value="income" class="bg-zinc-900 text-white">Apenas Entradas (+)</option>
+                        <option value="expense" class="bg-zinc-900 text-white">Apenas Saídas (-)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <select id="filter-category" onchange="filterTransactions()" class="w-full px-3 py-2 text-xs rounded-xl glass-input text-white">
+                        <option value="all" class="bg-zinc-900 text-white">Todas as Categorias</option>
+                        <option value="Alimentação" class="bg-zinc-900 text-white">Alimentação</option>
+                        <option value="Moradia" class="bg-zinc-900 text-white">Moradia</option>
+                        <option value="Transporte" class="bg-zinc-900 text-white">Transporte</option>
+                        <option value="Lazer" class="bg-zinc-900 text-white">Lazer</option>
+                        <option value="Saúde" class="bg-zinc-900 text-white">Saúde</option>
+                        <option value="Salário" class="bg-zinc-900 text-white">Salário / Proventos</option>
+                        <option value="Investimentos" class="bg-zinc-900 text-white">Investimentos</option>
+                        <option value="Outros" class="bg-zinc-900 text-white">Outros</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabela com Scroll Horizontal Limpo para Celulares -->
+            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                <table class="w-full text-left border-collapse min-w-[500px] sm:min-w-full">
+                    <thead>
+                        <tr class="border-b border-white/10 text-[10px] sm:text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
+                            <th class="py-2.5 px-3 sm:px-4">Descrição</th>
+                            <th class="py-2.5 px-3 sm:px-4">Categoria</th>
+                            <th class="py-2.5 px-3 sm:px-4">Data</th>
+                            <th class="py-2.5 px-3 sm:px-4 text-right">Valor</th>
+                            <th class="py-2.5 px-3 sm:px-4 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-list" class="divide-y divide-white/5 text-xs sm:text-sm">
+                        <!-- Injetado via JS -->
+                    </tbody>
+                </table>
+
+                <div id="empty-state" class="text-center py-8 sm:py-12 hidden">
+                    <i class="fa-solid fa-receipt text-3xl sm:text-4xl text-zinc-600 mb-2"></i>
+                    <p class="text-xs sm:text-sm font-medium text-zinc-400">Nenhuma transação encontrada.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: NOVO LANÇAMENTO (Mobile Friendly) -->
+    <div id="modal-transaction" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-md rounded-2xl p-5 sm:p-6 border border-white/15 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-zinc-400"></i> Novo Lançamento
+                </h3>
+                <button onclick="closeTransactionModal()" class="text-zinc-400 hover:text-white text-lg p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="transaction-form" onsubmit="handleNewTransaction(event)" class="space-y-3 sm:space-y-4">
+                <div>
+                    <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Descrição</label>
+                    <input type="text" id="tx-desc" required placeholder="Ex: Mercado, Uber, Salário..." class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Tipo</label>
+                        <select id="tx-type" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                            <option value="expense" class="bg-zinc-900">Saída (-)</option>
+                            <option value="income" class="bg-zinc-900">Entrada (+)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Valor (R$)</label>
+                        <input type="number" step="0.01" id="tx-amount" required placeholder="0,00" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Categoria</label>
+                        <select id="tx-category" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                            <option value="Alimentação" class="bg-zinc-900">Alimentação</option>
+                            <option value="Moradia" class="bg-zinc-900">Moradia</option>
+                            <option value="Transporte" class="bg-zinc-900">Transporte</option>
+                            <option value="Lazer" class="bg-zinc-900">Lazer</option>
+                            <option value="Saúde" class="bg-zinc-900">Saúde</option>
+                            <option value="Salário" class="bg-zinc-900">Salário</option>
+                            <option value="Investimentos" class="bg-zinc-900">Investimentos</option>
+                            <option value="Outros" class="bg-zinc-900">Outros</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Data</label>
+                        <input type="date" id="tx-date" required class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 pt-3">
+                    <button type="button" onclick="closeTransactionModal()" class="w-1/2 py-2.5 text-xs font-semibold glass-button rounded-xl text-zinc-400">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="w-1/2 py-2.5 text-xs font-semibold glass-button rounded-xl bg-white/15 text-white hover:bg-white/25">
+                        Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: OPEN FINANCE SIMULATION -->
+    <div id="modal-sync" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-lg rounded-2xl p-5 sm:p-6 border border-white/15 shadow-2xl relative text-center max-h-[90vh] overflow-y-auto">
+            <button onclick="closeSyncModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg p-1">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="sync-step-select">
+                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl glass-panel mx-auto flex items-center justify-center mb-3 border border-white/20">
+                    <i class="fa-solid fa-building-columns text-xl sm:text-2xl text-white"></i>
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold text-white">Sincronização Open Finance</h3>
+                <p class="text-[11px] sm:text-xs text-zinc-400 mt-1 max-w-sm mx-auto">Selecione seu banco para importar transações automaticamente.</p>
+
+                <div class="grid grid-cols-2 gap-2.5 sm:gap-3 my-4 sm:my-6">
+                    <button onclick="simulateBankSync('Nubank')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple-600/30 border border-purple-500/40 flex items-center justify-center font-bold text-xs text-purple-300">Nu</div>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Nubank</p>
+                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Conexão API</p>
+                        </div>
+                    </button>
+
+                    <button onclick="simulateBankSync('Itaú')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-600/30 border border-orange-500/40 flex items-center justify-center font-bold text-xs text-orange-300">It</div>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Banco Itaú</p>
+                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Open Finance</p>
+                        </div>
+                    </button>
+
+                    <button onclick="simulateBankSync('Bradesco')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-red-600/30 border border-red-500/40 flex items-center justify-center font-bold text-xs text-red-300">Br</div>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Bradesco</p>
+                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Open Finance</p>
+                        </div>
+                    </button>
+
+                    <button onclick="simulateBankSync('Banco do Brasil')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-yellow-600/30 border border-yellow-500/40 flex items-center justify-center font-bold text-xs text-yellow-300">BB</div>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Banco do Brasil</p>
+                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Conexão API</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <div id="sync-step-loading" class="hidden py-6 sm:py-8">
+                <div class="relative w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3">
+                    <div class="absolute inset-0 rounded-full border-2 border-white/10"></div>
+                    <div class="absolute inset-0 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
+                </div>
+                <h4 id="sync-loading-bank" class="text-sm sm:text-base font-bold text-white">Conectando ao banco...</h4>
+            </div>
+
+            <div id="sync-step-success" class="hidden py-4 sm:py-6">
+                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3 text-xl sm:text-2xl">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h4 class="text-base sm:text-lg font-bold text-white">Sincronização Concluída!</h4>
+                <p id="sync-success-msg" class="text-xs text-zinc-400 mt-1"></p>
+                <button onclick="closeSyncModal()" class="mt-4 sm:mt-6 px-6 py-2 text-xs font-semibold glass-button rounded-xl bg-white/10 text-white">
+                    Ver Atualizações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Principal -->
+    <script src="script.js"></script>
 </body>
 </html>
