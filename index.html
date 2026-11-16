@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aquiles Finance - Gestão Financeira Inteligente</title>
+    <title>Aquiles Finance - Liquid Glass HIG Edition</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,282 +14,359 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Google Fonts (Inter) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts (Inter with tight tracking) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Configuração Customizada do Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        darkBg: '#09090b',
-                        darkCard: '#121215',
-                        darkBorder: 'rgba(255, 255, 255, 0.1)',
-                        neonGreen: '#10b981',
-                        neonRed: '#ef4444',
-                    }
-                }
-            }
+    <!-- Estilos Customizados - Liquid Glass & Apple HIG System -->
+    <style>
+        body {
+            background-color: #050507;
+            color: #f4f4f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            letter-spacing: -0.011em;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 90% 85%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(18, 16, 26, 0.4) 0%, transparent 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
         }
-    </script>
 
-    <!-- Estilos Customizados -->
-    <link rel="stylesheet" href="style.css">
+        /* Apple Liquid Glass Panels */
+        .glass-panel {
+            background: rgba(18, 16, 26, 0.45);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 20px 40px -15px rgba(0, 0, 0, 0.6),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),
+                inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        /* Subtly specular highlight header panels */
+        .glass-card-hero {
+            background: linear-gradient(135deg, rgba(30, 24, 48, 0.5) 0%, rgba(14, 12, 22, 0.6) 100%);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(168, 85, 247, 0.18);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.7),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.18),
+                0 0 30px 0 rgba(139, 92, 246, 0.05);
+        }
+
+        /* Apple HIG Interactive Touch/Click Tactile State */
+        .glass-button {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            color: #f4f4f5;
+        }
+
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            transform: scale(1.015);
+        }
+
+        .glass-button:active {
+            transform: scale(0.97);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Liquid Input Fields */
+        .glass-input {
+            background: rgba(8, 7, 12, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            color: #ffffff;
+            backdrop-filter: blur(12px);
+            transition: all 0.2s ease;
+        }
+
+        .glass-input:focus {
+            outline: none;
+            border-color: rgba(139, 92, 246, 0.45);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+        }
+
+        /* Smooth iOS Style Navigation Items */
+        .nav-btn {
+            transition: all 0.2s ease;
+        }
+        .nav-btn:active {
+            transform: scale(0.92);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+        .pulse-dot { animation: pulse-glow 2.5s infinite ease-in-out; }
+    </style>
 </head>
-<body class="antialiased pb-12">
+<body class="antialiased pb-24 sm:pb-12">
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-5 z-50 glass-panel px-4 py-3 rounded-xl border border-white/10 hidden items-center space-x-3 shadow-2xl transition-all duration-300">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-white text-base"></i>
-        <span id="toast-msg" class="text-xs sm:text-sm font-medium text-white">Ação realizada com sucesso!</span>
+    <div id="toast" class="fixed bottom-20 sm:bottom-6 right-4 left-4 sm:left-auto sm:right-6 z-50 glass-panel px-4 py-3 rounded-2xl border border-purple-500/20 hidden items-center space-x-3 shadow-2xl transition-all duration-300">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-violet-400 text-base"></i>
+        <span id="toast-msg" class="text-xs sm:text-sm font-medium text-zinc-200">Ação realizada com sucesso!</span>
     </div>
 
-    <!-- HEADER / NAVIGATION -->
-    <header class="sticky top-0 z-40 border-b border-white/10 bg-black/70 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-            
-            <!-- Logo Aquiles Oficial -->
-            <div class="flex items-center space-x-2.5 sm:space-x-3">
-                <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl glass-panel flex items-center justify-center border border-white/20 bg-black overflow-hidden p-1">
-                    <img src="logo.png" alt="Logo Aquiles" class="w-full h-full object-contain">
+    <!-- HEADER / APPLE BAR -->
+    <header class="sticky top-0 z-40 border-b border-white/5 bg-[#050507]/70 backdrop-blur-2xl">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl glass-panel flex items-center justify-center border border-white/10 bg-black/40 overflow-hidden p-1.5 shadow-lg">
+                    <img src="logo.png" alt="Logo Aquiles" class="w-full h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-shield-halved text-violet-400 text-sm\'></i>'">
                 </div>
                 <div>
-                    <h1 class="text-base sm:text-xl font-bold tracking-wider text-white uppercase flex items-center gap-1.5">
-                        Aquiles <span class="text-[10px] sm:text-xs font-light tracking-normal px-2 py-0.5 rounded-full border border-white/20 bg-white/5 text-zinc-300">Finance</span>
-                    </h1>
-                    <p class="text-[10px] sm:text-xs text-zinc-400 hidden sm:block">Controle & Inteligência Financeira</p>
+                    <p class="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Olá,</p>
+                    <h1 class="text-sm font-bold text-zinc-100 tracking-tight">Gabryel Lopes</h1>
                 </div>
             </div>
 
-            <!-- Botão Sincronizar & Status -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-full glass-panel text-xs border border-white/10">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
-                    <span class="text-zinc-300 font-medium">Open Finance: <span class="text-white">Conectado</span></span>
-                </div>
-
-                <button onclick="openSyncModal()" class="glass-button px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs font-medium flex items-center space-x-1.5">
-                    <i class="fa-solid fa-arrows-rotate text-zinc-300"></i>
-                    <span>Sincronizar</span>
+            <div class="flex items-center space-x-2">
+                <button onclick="togglePrivacy()" title="Ocultar/Exibir Valores" class="w-9 h-9 rounded-2xl glass-button flex items-center justify-center text-zinc-400 hover:text-white">
+                    <i id="privacy-icon" class="fa-solid fa-eye text-xs"></i>
+                </button>
+                <button onclick="openSyncModal()" title="Open Finance" class="w-9 h-9 rounded-2xl glass-button flex items-center justify-center text-violet-300 hover:text-white">
+                    <i class="fa-solid fa-building-columns text-xs"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN DASHBOARD -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-8 space-y-4 sm:space-y-8">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-4xl mx-auto px-4 pt-4 sm:pt-6 space-y-6">
 
-        <!-- CARDS DE MÉTRICAS (1 Coluna no Celular) -->
-        <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
+        <!-- TELA 1: INÍCIO (VISÃO GERAL) -->
+        <section id="tab-home" class="space-y-6 tab-content">
             
-            <!-- Saldo Total -->
-            <div class="glass-panel p-4 sm:p-6 rounded-2xl relative overflow-hidden">
-                <div class="flex justify-between items-start mb-2 sm:mb-4">
+            <!-- Hero Card: Liquid Glass Style -->
+            <div class="glass-card-hero p-6 rounded-3xl relative overflow-hidden">
+                <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">Saldo Total da Conta</span>
+                    <i class="fa-solid fa-wallet text-violet-400/80 text-sm"></i>
+                </div>
+                
+                <div class="flex items-baseline space-x-3 my-2">
+                    <h2 id="total-balance-display" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">R$ 0,00</h2>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-white/10">
                     <div>
-                        <p class="text-[10px] sm:text-xs font-medium text-zinc-400 uppercase tracking-wider">Saldo Total Atual</p>
-                        <h2 id="total-balance" class="text-2xl sm:text-3xl font-extrabold text-white mt-0.5 sm:mt-1">R$ 0,00</h2>
+                        <p class="text-[10px] text-zinc-400 uppercase font-medium">Entradas do Mês</p>
+                        <p id="home-income" class="text-sm sm:text-base font-bold text-emerald-400/90 mt-0.5">R$ 0,00</p>
                     </div>
-                    <div class="p-2.5 sm:p-3 rounded-xl glass-panel text-white">
-                        <i class="fa-solid fa-wallet text-base sm:text-xl"></i>
-                    </div>
-                </div>
-                <div class="flex items-center text-[10px] sm:text-xs text-zinc-400 space-x-2">
-                    <span class="text-white font-medium"><i class="fa-solid fa-lock text-emerald-400 mr-1"></i>Protegido</span>
-                    <span>• Em tempo real</span>
-                </div>
-            </div>
-
-            <!-- Entradas -->
-            <div class="glass-panel p-4 sm:p-6 rounded-2xl relative overflow-hidden">
-                <div class="flex justify-between items-start mb-2 sm:mb-4">
                     <div>
-                        <p class="text-[10px] sm:text-xs font-medium text-zinc-400 uppercase tracking-wider">Entradas do Mês</p>
-                        <h2 id="total-incomes" class="text-2xl sm:text-3xl font-extrabold text-white mt-0.5 sm:mt-1">R$ 0,00</h2>
+                        <p class="text-[10px] text-zinc-400 uppercase font-medium">Saídas do Mês</p>
+                        <p id="home-expense" class="text-sm sm:text-base font-bold text-rose-400/90 mt-0.5">R$ 0,00</p>
                     </div>
-                    <div class="p-2.5 sm:p-3 rounded-xl glass-panel text-emerald-400 border border-emerald-500/20 bg-emerald-500/10">
-                        <i class="fa-solid fa-arrow-trend-up text-base sm:text-xl"></i>
-                    </div>
-                </div>
-                <div class="flex items-center text-[10px] sm:text-xs text-zinc-400 space-x-2">
-                    <span class="text-emerald-400 font-semibold">Receitas</span>
-                    <span>• Proventos</span>
                 </div>
             </div>
 
-            <!-- Saídas -->
-            <div class="glass-panel p-4 sm:p-6 rounded-2xl relative overflow-hidden">
-                <div class="flex justify-between items-start mb-2 sm:mb-4">
-                    <div>
-                        <p class="text-[10px] sm:text-xs font-medium text-zinc-400 uppercase tracking-wider">Saídas do Mês</p>
-                        <h2 id="total-expenses" class="text-2xl sm:text-3xl font-extrabold text-white mt-0.5 sm:mt-1">R$ 0,00</h2>
+            <!-- Atalhos Rápidos -->
+            <div class="grid grid-cols-4 gap-3">
+                <button onclick="openTransactionModal()" class="glass-button p-3.5 rounded-2xl flex flex-col items-center justify-center space-y-2 group">
+                    <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-plus text-xs"></i>
                     </div>
-                    <div class="p-2.5 sm:p-3 rounded-xl glass-panel text-rose-500 border border-rose-500/20 bg-rose-500/10">
-                        <i class="fa-solid fa-arrow-trend-down text-base sm:text-xl"></i>
+                    <span class="text-[11px] font-medium text-zinc-300">Novo Gasto</span>
+                </button>
+                <button onclick="openSyncModal()" class="glass-button p-3.5 rounded-2xl flex flex-col items-center justify-center space-y-2 group">
+                    <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-rotate text-xs"></i>
                     </div>
-                </div>
-                <div class="flex items-center text-[10px] sm:text-xs text-zinc-400 space-x-2">
-                    <span class="text-rose-400 font-semibold">Despesas</span>
-                    <span>• Gastos</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- GRÁFICOS (Ajustados para telas pequenas) -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div class="lg:col-span-2 glass-panel p-4 sm:p-6 rounded-2xl flex flex-col justify-between">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-                    <div>
-                        <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-chart-simple text-zinc-400"></i> Fluxo de Caixa
-                        </h3>
-                        <p class="text-[10px] sm:text-xs text-zinc-400">Comparativo mensal de Entradas vs Saídas</p>
+                    <span class="text-[11px] font-medium text-zinc-300">Sincronizar</span>
+                </button>
+                <button onclick="switchTab('analytics')" class="glass-button p-3.5 rounded-2xl flex flex-col items-center justify-center space-y-2 group">
+                    <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-chart-pie text-xs"></i>
                     </div>
-                    <div class="flex items-center space-x-3 text-[11px]">
-                        <div class="flex items-center space-x-1">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span>
-                            <span class="text-zinc-300">Entradas</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></span>
-                            <span class="text-zinc-300">Saídas</span>
-                        </div>
+                    <span class="text-[11px] font-medium text-zinc-300">Análises</span>
+                </button>
+                <button onclick="switchTab('transactions')" class="glass-button p-3.5 rounded-2xl flex flex-col items-center justify-center space-y-2 group">
+                    <div class="w-10 h-10 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-300 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-receipt text-xs"></i>
                     </div>
-                </div>
-                <div class="relative w-full h-56 sm:h-80">
-                    <canvas id="cashFlowChart"></canvas>
-                </div>
-            </div>
-
-            <div class="glass-panel p-4 sm:p-6 rounded-2xl flex flex-col justify-between">
-                <div class="mb-2 sm:mb-4">
-                    <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-chart-pie text-zinc-400"></i> Categorias de Saídas
-                    </h3>
-                    <p class="text-[10px] sm:text-xs text-zinc-400">Distribuição dos seus gastos</p>
-                </div>
-                <div class="relative w-full h-52 sm:h-64 flex items-center justify-center">
-                    <canvas id="categoryChart"></canvas>
-                </div>
-                <p id="no-category-msg" class="text-center text-[10px] sm:text-xs text-zinc-500 mt-2 hidden">
-                    Nenhuma despesa cadastrada para exibir o gráfico.
-                </p>
-            </div>
-        </section>
-
-        <!-- EXTRATO E FILTROS -->
-        <section class="glass-panel rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div>
-                    <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-zinc-400"></i> Extrato de Transações
-                    </h3>
-                    <p class="text-[10px] sm:text-xs text-zinc-400">Gerencie entradas e saídas do sistema</p>
-                </div>
-
-                <button onclick="openTransactionModal()" class="glass-button px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 bg-white/10 w-full sm:w-auto">
-                    <i class="fa-solid fa-plus text-white"></i>
-                    <span>Novo Lançamento</span>
+                    <span class="text-[11px] font-medium text-zinc-300">Extrato</span>
                 </button>
             </div>
 
-            <!-- Barra de Filtros em Grade Adaptável -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 pt-2 border-t border-white/5">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs"></i>
-                    <input type="text" id="search-input" oninput="filterTransactions()" placeholder="Buscar por descrição..." class="w-full pl-9 pr-3 py-2 text-xs rounded-xl glass-input text-white">
+            <!-- Atividade Recente -->
+            <div class="glass-panel rounded-3xl p-5 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-zinc-100 tracking-tight">Atividade Recente</h3>
+                    <button onclick="switchTab('transactions')" class="text-xs text-violet-400 hover:text-violet-300 transition-colors">Ver tudo</button>
                 </div>
-
-                <div>
-                    <select id="filter-type" onchange="filterTransactions()" class="w-full px-3 py-2 text-xs rounded-xl glass-input text-white">
-                        <option value="all" class="bg-zinc-900 text-white">Todos os Tipos</option>
-                        <option value="income" class="bg-zinc-900 text-white">Apenas Entradas (+)</option>
-                        <option value="expense" class="bg-zinc-900 text-white">Apenas Saídas (-)</option>
-                    </select>
+                <div id="home-recent-list" class="divide-y divide-white/5 text-xs">
+                    <!-- Injetado via JS -->
                 </div>
+            </div>
+        </section>
 
-                <div>
-                    <select id="filter-category" onchange="filterTransactions()" class="w-full px-3 py-2 text-xs rounded-xl glass-input text-white">
-                        <option value="all" class="bg-zinc-900 text-white">Todas as Categorias</option>
-                        <option value="Alimentação" class="bg-zinc-900 text-white">Alimentação</option>
-                        <option value="Moradia" class="bg-zinc-900 text-white">Moradia</option>
-                        <option value="Transporte" class="bg-zinc-900 text-white">Transporte</option>
-                        <option value="Lazer" class="bg-zinc-900 text-white">Lazer</option>
-                        <option value="Saúde" class="bg-zinc-900 text-white">Saúde</option>
-                        <option value="Salário" class="bg-zinc-900 text-white">Salário / Proventos</option>
-                        <option value="Investimentos" class="bg-zinc-900 text-white">Investimentos</option>
-                        <option value="Outros" class="bg-zinc-900 text-white">Outros</option>
-                    </select>
+        <!-- TELA 2: EXTRATO COMPLETO -->
+        <section id="tab-transactions" class="space-y-4 tab-content hidden">
+            <div class="flex justify-between items-center">
+                <h2 class="text-lg font-bold text-white tracking-tight">Extrato de Transações</h2>
+                <button onclick="openTransactionModal()" class="glass-button px-3.5 py-2 rounded-2xl text-xs font-semibold bg-violet-500/15 text-violet-200 border border-violet-500/30">
+                    <i class="fa-solid fa-plus mr-1"></i> Adicionar
+                </button>
+            </div>
+
+            <!-- Filtros -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <input type="text" id="search-input" oninput="filterTransactions()" placeholder="Buscar lançamento..." class="px-3.5 py-2.5 text-xs rounded-2xl glass-input text-white">
+                <select id="filter-type" onchange="filterTransactions()" class="px-3.5 py-2.5 text-xs rounded-2xl glass-input text-white">
+                    <option value="all" class="bg-zinc-900">Todos os Tipos</option>
+                    <option value="income" class="bg-zinc-900">Entradas (+)</option>
+                    <option value="expense" class="bg-zinc-900">Saídas (-)</option>
+                </select>
+                <select id="filter-category" onchange="filterTransactions()" class="px-3.5 py-2.5 text-xs rounded-2xl glass-input text-white">
+                    <option value="all" class="bg-zinc-900">Todas Categorias</option>
+                    <option value="Alimentação" class="bg-zinc-900">Alimentação</option>
+                    <option value="Moradia" class="bg-zinc-900">Moradia</option>
+                    <option value="Transporte" class="bg-zinc-900">Transporte</option>
+                    <option value="Lazer" class="bg-zinc-900">Lazer</option>
+                    <option value="Saúde" class="bg-zinc-900">Saúde</option>
+                    <option value="Salário" class="bg-zinc-900">Salário</option>
+                    <option value="Investimentos" class="bg-zinc-900">Investimentos</option>
+                    <option value="Outros" class="bg-zinc-900">Outros</option>
+                </select>
+            </div>
+
+            <div class="glass-panel rounded-3xl overflow-hidden border border-white/5">
+                <div id="full-transaction-list" class="divide-y divide-white/5 text-xs">
+                    <!-- Injetado via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 3: GRÁFICOS E ANÁLISES -->
+        <section id="tab-analytics" class="space-y-4 tab-content hidden">
+            <h2 class="text-lg font-bold text-white tracking-tight">Análise Financeira</h2>
+            
+            <!-- Gráfico de Rosca com Valor Central em Reais -->
+            <div class="glass-panel p-5 rounded-3xl space-y-3 relative">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-semibold text-zinc-300">Distribuição de Gastos por Categoria</h3>
+                    <span class="text-[10px] text-rose-400/90 font-medium">Saídas Mês Atual</span>
+                </div>
+                
+                <div class="relative w-full h-64 flex items-center justify-center my-2">
+                    <canvas id="categoryChart"></canvas>
+                    
+                    <!-- Valor Total sobreposto no Centro da Rosca -->
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                        <span class="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Gastos do Mês</span>
+                        <span id="doughnut-center-total" class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-0.5">R$ 0,00</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tabela com Scroll Horizontal Limpo para Celulares -->
-            <div class="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
-                <table class="w-full text-left border-collapse min-w-[500px] sm:min-w-full">
-                    <thead>
-                        <tr class="border-b border-white/10 text-[10px] sm:text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
-                            <th class="py-2.5 px-3 sm:px-4">Descrição</th>
-                            <th class="py-2.5 px-3 sm:px-4">Categoria</th>
-                            <th class="py-2.5 px-3 sm:px-4">Data</th>
-                            <th class="py-2.5 px-3 sm:px-4 text-right">Valor</th>
-                            <th class="py-2.5 px-3 sm:px-4 text-center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transaction-list" class="divide-y divide-white/5 text-xs sm:text-sm">
-                        <!-- Injetado via JS -->
-                    </tbody>
-                </table>
+            <div class="glass-panel p-5 rounded-3xl space-y-3">
+                <h3 class="text-xs font-semibold text-zinc-300">Fluxo de Caixa Mensal</h3>
+                <div class="relative w-full h-60">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+            </div>
+        </section>
 
-                <div id="empty-state" class="text-center py-8 sm:py-12 hidden">
-                    <i class="fa-solid fa-receipt text-3xl sm:text-4xl text-zinc-600 mb-2"></i>
-                    <p class="text-xs sm:text-sm font-medium text-zinc-400">Nenhuma transação encontrada.</p>
+        <!-- TELA 4: PERFIL -->
+        <section id="tab-profile" class="space-y-4 tab-content hidden">
+            <h2 class="text-lg font-bold text-white tracking-tight">Perfil & Conta</h2>
+            
+            <div class="glass-panel p-6 rounded-3xl space-y-4">
+                <div class="flex items-center space-x-3 pb-4 border-b border-white/10">
+                    <div class="w-12 h-12 rounded-2xl glass-panel flex items-center justify-center border border-white/10 bg-black/50 overflow-hidden p-1 shadow-lg">
+                        <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-shield-halved text-violet-400 text-base\'></i>'">
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Gabryel Aquiles T. Lopes</h3>
+                        <p class="text-xs text-violet-400 font-medium">Aquiles Softwares</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-xs">
+                    <div class="flex justify-between py-1.5 border-b border-white/5">
+                        <span class="text-zinc-400">Open Finance</span>
+                        <span class="text-emerald-400/90 font-semibold flex items-center">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot mr-1.5"></span>Conectado
+                        </span>
+                    </div>
+                    <div class="flex justify-between py-1.5 border-b border-white/5">
+                        <span class="text-zinc-400">Armazenamento</span>
+                        <span class="text-zinc-200 font-medium">LocalStorage Criptografado</span>
+                    </div>
+                    <div class="flex justify-between py-1.5">
+                        <span class="text-zinc-400">Versão do Aplicativo</span>
+                        <span class="text-violet-300 font-semibold">2.2.0 Liquid Edition</span>
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- MODAL 1: NOVO LANÇAMENTO (Mobile Friendly) -->
-    <div id="modal-transaction" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel w-full max-w-md rounded-2xl p-5 sm:p-6 border border-white/15 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4 sm:mb-6">
-                <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square text-zinc-400"></i> Novo Lançamento
+    <!-- BARRA DE NAVEGAÇÃO INFERIOR ESTILO APPLE HIG -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 bg-[#050507]/75 backdrop-blur-2xl border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex justify-around items-center">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center justify-center text-violet-400 space-y-1">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span class="text-[10px] font-medium">Início</span>
+            </button>
+            <button onclick="switchTab('transactions')" id="nav-transactions" class="nav-btn flex flex-col items-center justify-center text-zinc-400 hover:text-white space-y-1">
+                <i class="fa-solid fa-receipt text-sm"></i>
+                <span class="text-[10px] font-medium">Extrato</span>
+            </button>
+            <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-btn flex flex-col items-center justify-center text-zinc-400 hover:text-white space-y-1">
+                <i class="fa-solid fa-chart-pie text-sm"></i>
+                <span class="text-[10px] font-medium">Análises</span>
+            </button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex flex-col items-center justify-center text-zinc-400 hover:text-white space-y-1">
+                <i class="fa-solid fa-user text-sm"></i>
+                <span class="text-[10px] font-medium">Perfil</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- MODAL NOVO LANÇAMENTO -->
+    <div id="modal-transaction" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 border border-white/10 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2 tracking-tight">
+                    <i class="fa-solid fa-pen-to-square text-violet-400"></i> Novo Lançamento
                 </h3>
-                <button onclick="closeTransactionModal()" class="text-zinc-400 hover:text-white text-lg p-1">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeTransactionModal()" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
             </div>
-
-            <form id="transaction-form" onsubmit="handleNewTransaction(event)" class="space-y-3 sm:space-y-4">
+            <form id="transaction-form" onsubmit="handleNewTransaction(event)" class="space-y-3.5 text-xs">
                 <div>
-                    <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Descrição</label>
-                    <input type="text" id="tx-desc" required placeholder="Ex: Mercado, Uber, Salário..." class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                    <label class="block text-zinc-300 mb-1 font-medium">Descrição</label>
+                    <input type="text" id="tx-desc" required placeholder="Ex: Mercado, Uber, Salário..." class="w-full px-3.5 py-2.5 rounded-2xl glass-input text-white">
                 </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Tipo</label>
-                        <select id="tx-type" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                        <label class="block text-zinc-300 mb-1 font-medium">Tipo</label>
+                        <select id="tx-type" class="w-full px-3.5 py-2.5 rounded-2xl glass-input text-white">
                             <option value="expense" class="bg-zinc-900">Saída (-)</option>
                             <option value="income" class="bg-zinc-900">Entrada (+)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Valor (R$)</label>
-                        <input type="number" step="0.01" id="tx-amount" required placeholder="0,00" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                        <label class="block text-zinc-300 mb-1 font-medium">Valor (R$)</label>
+                        <input type="number" step="0.01" id="tx-amount" required placeholder="0,00" class="w-full px-3.5 py-2.5 rounded-2xl glass-input text-white">
                     </div>
                 </div>
-
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Categoria</label>
-                        <select id="tx-category" class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                        <label class="block text-zinc-300 mb-1 font-medium">Categoria</label>
+                        <select id="tx-category" class="w-full px-3.5 py-2.5 rounded-2xl glass-input text-white">
                             <option value="Alimentação" class="bg-zinc-900">Alimentação</option>
                             <option value="Moradia" class="bg-zinc-900">Moradia</option>
                             <option value="Transporte" class="bg-zinc-900">Transporte</option>
@@ -301,94 +378,379 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[11px] sm:text-xs font-medium text-zinc-300 mb-1">Data</label>
-                        <input type="date" id="tx-date" required class="w-full px-3 py-2 text-xs sm:text-sm rounded-xl glass-input">
+                        <label class="block text-zinc-300 mb-1 font-medium">Data</label>
+                        <input type="date" id="tx-date" required class="w-full px-3.5 py-2.5 rounded-2xl glass-input text-white">
                     </div>
                 </div>
-
-                <div class="flex items-center space-x-3 pt-3">
-                    <button type="button" onclick="closeTransactionModal()" class="w-1/2 py-2.5 text-xs font-semibold glass-button rounded-xl text-zinc-400">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="w-1/2 py-2.5 text-xs font-semibold glass-button rounded-xl bg-white/15 text-white hover:bg-white/25">
-                        Salvar
-                    </button>
+                <div class="flex space-x-2 pt-3">
+                    <button type="button" onclick="closeTransactionModal()" class="w-1/2 py-2.5 glass-button rounded-2xl text-zinc-400 font-medium">Cancelar</button>
+                    <button type="submit" class="w-1/2 py-2.5 glass-button rounded-2xl bg-violet-600/25 text-white font-semibold border-violet-500/40">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL 2: OPEN FINANCE SIMULATION -->
-    <div id="modal-sync" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel w-full max-w-lg rounded-2xl p-5 sm:p-6 border border-white/15 shadow-2xl relative text-center max-h-[90vh] overflow-y-auto">
-            <button onclick="closeSyncModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg p-1">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
+    <!-- MODAL OPEN FINANCE SYNC -->
+    <div id="modal-sync" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-6 border border-white/10 text-center relative">
+            <button onclick="closeSyncModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
             <div id="sync-step-select">
-                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl glass-panel mx-auto flex items-center justify-center mb-3 border border-white/20">
-                    <i class="fa-solid fa-building-columns text-xl sm:text-2xl text-white"></i>
+                <div class="w-12 h-12 rounded-2xl glass-panel mx-auto flex items-center justify-center mb-3 border border-violet-500/30 text-violet-300">
+                    <i class="fa-solid fa-building-columns text-base"></i>
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-white">Sincronização Open Finance</h3>
-                <p class="text-[11px] sm:text-xs text-zinc-400 mt-1 max-w-sm mx-auto">Selecione seu banco para importar transações automaticamente.</p>
-
-                <div class="grid grid-cols-2 gap-2.5 sm:gap-3 my-4 sm:my-6">
-                    <button onclick="simulateBankSync('Nubank')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple-600/30 border border-purple-500/40 flex items-center justify-center font-bold text-xs text-purple-300">Nu</div>
-                        <div>
-                            <p class="text-xs font-semibold text-white">Nubank</p>
-                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Conexão API</p>
-                        </div>
+                <h3 class="text-sm font-bold text-white tracking-tight">Open Finance</h3>
+                <p class="text-[11px] text-zinc-400 mt-1">Sincronize seus dados bancários via conexão segura.</p>
+                <div class="grid grid-cols-2 gap-2.5 my-4">
+                    <button onclick="simulateBankSync('Nubank')" class="glass-button p-3 rounded-2xl text-left">
+                        <p class="text-xs font-bold text-white">Nubank</p>
+                        <p class="text-[9px] text-violet-400 font-medium">Conectar API</p>
                     </button>
-
-                    <button onclick="simulateBankSync('Itaú')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-600/30 border border-orange-500/40 flex items-center justify-center font-bold text-xs text-orange-300">It</div>
-                        <div>
-                            <p class="text-xs font-semibold text-white">Banco Itaú</p>
-                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Open Finance</p>
-                        </div>
-                    </button>
-
-                    <button onclick="simulateBankSync('Bradesco')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-red-600/30 border border-red-500/40 flex items-center justify-center font-bold text-xs text-red-300">Br</div>
-                        <div>
-                            <p class="text-xs font-semibold text-white">Bradesco</p>
-                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Open Finance</p>
-                        </div>
-                    </button>
-
-                    <button onclick="simulateBankSync('Banco do Brasil')" class="glass-button p-3 sm:p-4 rounded-xl flex items-center space-x-2.5 text-left">
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-yellow-600/30 border border-yellow-500/40 flex items-center justify-center font-bold text-xs text-yellow-300">BB</div>
-                        <div>
-                            <p class="text-xs font-semibold text-white">Banco do Brasil</p>
-                            <p class="text-[9px] sm:text-[10px] text-zinc-400">Conexão API</p>
-                        </div>
+                    <button onclick="simulateBankSync('Itaú')" class="glass-button p-3 rounded-2xl text-left">
+                        <p class="text-xs font-bold text-white">Banco Itaú</p>
+                        <p class="text-[9px] text-violet-400 font-medium">Conectar API</p>
                     </button>
                 </div>
             </div>
-
-            <div id="sync-step-loading" class="hidden py-6 sm:py-8">
-                <div class="relative w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3">
-                    <div class="absolute inset-0 rounded-full border-2 border-white/10"></div>
-                    <div class="absolute inset-0 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
-                </div>
-                <h4 id="sync-loading-bank" class="text-sm sm:text-base font-bold text-white">Conectando ao banco...</h4>
-            </div>
-
-            <div id="sync-step-success" class="hidden py-4 sm:py-6">
-                <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3 text-xl sm:text-2xl">
-                    <i class="fa-solid fa-check"></i>
-                </div>
-                <h4 class="text-base sm:text-lg font-bold text-white">Sincronização Concluída!</h4>
-                <p id="sync-success-msg" class="text-xs text-zinc-400 mt-1"></p>
-                <button onclick="closeSyncModal()" class="mt-4 sm:mt-6 px-6 py-2 text-xs font-semibold glass-button rounded-xl bg-white/10 text-white">
-                    Ver Atualizações
-                </button>
+            <div id="sync-step-loading" class="hidden py-6">
+                <div class="w-10 h-10 mx-auto mb-3 rounded-full border-2 border-violet-500/20 border-t-violet-500 animate-spin"></div>
+                <p id="sync-loading-bank" class="text-xs text-white font-bold">Conectando...</p>
             </div>
         </div>
     </div>
 
-    <!-- JS Principal -->
-    <script src="script.js"></script>
+    <!-- JavaScript Principal -->
+    <script>
+        let transactions = [];
+        let isPrivacyMode = false;
+        let cashFlowChartInstance = null;
+        let categoryChartInstance = null;
+
+        // Desaturated Apple HIG Color Palette
+        const categoryColors = {
+            'Alimentação': '#d97706',
+            'Moradia': '#2563eb',
+            'Transporte': '#7c3aed',
+            'Lazer': '#db2777',
+            'Saúde': '#0891b2',
+            'Salário': '#059669',
+            'Investimentos': '#4f46e5',
+            'Outros': '#4b5563'
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTransactions();
+            setDefaultDate();
+            initCharts();
+            renderApp();
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-violet-400');
+                el.classList.add('text-zinc-400');
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if(activeNav) {
+                activeNav.classList.remove('text-zinc-400');
+                activeNav.classList.add('text-violet-400');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function togglePrivacy() {
+            isPrivacyMode = !isPrivacyMode;
+            const icon = document.getElementById('privacy-icon');
+            if (isPrivacyMode) {
+                icon.className = 'fa-solid fa-eye-slash text-xs text-violet-400';
+            } else {
+                icon.className = 'fa-solid fa-eye text-xs';
+            }
+            renderApp();
+        }
+
+        function formatValue(value) {
+            if (isPrivacyMode) return 'R$ •••••';
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        }
+
+        function loadTransactions() {
+            const saved = localStorage.getItem('aquiles_transactions');
+            // Mock with current month dates
+            const now = new Date();
+            const yearStr = now.getFullYear();
+            const monthStr = String(now.getMonth() + 1).padStart(2, '0');
+            
+            transactions = saved ? JSON.parse(saved) : [
+                { id: '1', description: 'Salário Mensal', amount: 5500.00, type: 'income', category: 'Salário', date: `${yearStr}-${monthStr}-01` },
+                { id: '2', description: 'Supermercado', amount: 350.00, type: 'expense', category: 'Alimentação', date: `${yearStr}-${monthStr}-02` },
+                { id: '3', description: 'Aluguel & Condomínio', amount: 1200.00, type: 'expense', category: 'Moradia', date: `${yearStr}-${monthStr}-03` },
+                { id: '4', description: 'Uber & Transporte', amount: 85.50, type: 'expense', category: 'Transporte', date: `${yearStr}-${monthStr}-04` }
+            ];
+        }
+
+        function saveTransactions() {
+            localStorage.setItem('aquiles_transactions', JSON.stringify(transactions));
+        }
+
+        function setDefaultDate() {
+            document.getElementById('tx-date').value = new Date().toISOString().split('T')[0];
+        }
+
+        function renderApp() {
+            let currentMonthIncome = 0;
+            let currentMonthExpense = 0;
+            
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            let totalIncomeAllTime = 0;
+            let totalExpenseAllTime = 0;
+
+            transactions.forEach(t => {
+                const amt = Number(t.amount);
+                const tDate = new Date(t.date + 'T00:00:00');
+
+                if (t.type === 'income') totalIncomeAllTime += amt;
+                else totalExpenseAllTime += amt;
+
+                if (tDate.getMonth() === currentMonth && tDate.getFullYear() === currentYear) {
+                    if (t.type === 'income') {
+                        currentMonthIncome += amt;
+                    } else {
+                        currentMonthExpense += amt;
+                    }
+                }
+            });
+
+            const totalBalance = totalIncomeAllTime - totalExpenseAllTime;
+
+            document.getElementById('total-balance-display').textContent = formatValue(totalBalance);
+            document.getElementById('home-income').textContent = formatValue(currentMonthIncome);
+            document.getElementById('home-expense').textContent = formatValue(currentMonthExpense);
+
+            renderLists();
+            updateCharts();
+        }
+
+        function renderLists() {
+            const recentList = document.getElementById('home-recent-list');
+            const fullList = document.getElementById('full-transaction-list');
+            
+            const filtered = getFilteredTransactions();
+            const sorted = [...transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
+            const recent = sorted.slice(0, 4);
+
+            recentList.innerHTML = recent.length === 0 ? '<p class="text-zinc-500 py-3">Nenhum registro recente.</p>' : '';
+            recent.forEach(tx => {
+                recentList.innerHTML += createTxHTML(tx);
+            });
+
+            fullList.innerHTML = filtered.length === 0 ? '<p class="text-zinc-500 text-center py-6">Nenhuma transação encontrada.</p>' : '';
+            filtered.forEach(tx => {
+                fullList.innerHTML += createTxHTML(tx, true);
+            });
+        }
+
+        function createTxHTML(tx, showDelete = false) {
+            const isInc = tx.type === 'income';
+            return `
+                <div class="flex items-center justify-between py-3 px-3 hover:bg-white/[0.02] rounded-2xl transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-2xl glass-panel flex items-center justify-center text-xs ${isInc ? 'text-emerald-400 border-emerald-500/20' : 'text-rose-400 border-rose-500/20'}">
+                            <i class="fa-solid ${isInc ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-zinc-100">${escapeHtml(tx.description)}</p>
+                            <p class="text-[10px] text-zinc-400">${tx.category} • ${tx.date.split('-').reverse().join('/')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="font-bold ${isInc ? 'text-emerald-400/90' : 'text-rose-400/90'}">
+                            ${isInc ? '+' : '-'} ${formatValue(tx.amount)}
+                        </span>
+                        ${showDelete ? `<button onclick="deleteTx('${tx.id}')" class="text-zinc-600 hover:text-rose-400 transition-colors"><i class="fa-solid fa-trash-can text-xs"></i></button>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getFilteredTransactions() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const type = document.getElementById('filter-type').value;
+            const cat = document.getElementById('filter-category').value;
+
+            return transactions.filter(t => {
+                return t.description.toLowerCase().includes(search) &&
+                       (type === 'all' || t.type === type) &&
+                       (cat === 'all' || t.category === cat);
+            });
+        }
+
+        function filterTransactions() {
+            renderLists();
+        }
+
+        function deleteTx(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveTransactions();
+            renderApp();
+            showToast('Transação removida!');
+        }
+
+        function handleNewTransaction(e) {
+            e.preventDefault();
+            const newTx = {
+                id: Date.now().toString(),
+                description: document.getElementById('tx-desc').value,
+                amount: parseFloat(document.getElementById('tx-amount').value),
+                type: document.getElementById('tx-type').value,
+                category: document.getElementById('tx-category').value,
+                date: document.getElementById('tx-date').value
+            };
+            transactions.push(newTx);
+            saveTransactions();
+            renderApp();
+            closeTransactionModal();
+            showToast('Lançamento salvo com sucesso!');
+            document.getElementById('transaction-form').reset();
+            setDefaultDate();
+        }
+
+        function initCharts() {
+            // Chart 1: Bar Chart (animation: false)
+            const ctx1 = document.getElementById('cashFlowChart').getContext('2d');
+            cashFlowChartInstance = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [
+                        { label: 'Entradas', data: Array(12).fill(0), backgroundColor: '#059669', borderRadius: 4, barThickness: 10 },
+                        { label: 'Saídas', data: Array(12).fill(0), backgroundColor: '#dc2626', borderRadius: 4, barThickness: 10 }
+                    ]
+                },
+                options: {
+                    animation: false,
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        x: { grid: { display: false }, ticks: { color: '#71717a', font: { size: 9 } } }, 
+                        y: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#71717a', font: { size: 9 } } } 
+                    }
+                }
+            });
+
+            // Chart 2: Doughnut Chart (Gastos por Categoria) (animation: false)
+            const ctx2 = document.getElementById('categoryChart').getContext('2d');
+            categoryChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderWidth: 0 }] },
+                options: { 
+                    animation: false,
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    cutout: '78%', 
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { color: '#a1a1aa', font: { size: 10 }, boxWidth: 8, padding: 12 } 
+                        } 
+                    } 
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!cashFlowChartInstance || !categoryChartInstance) return;
+
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            const incomeByMonth = Array(12).fill(0);
+            const expenseByMonth = Array(12).fill(0);
+            const catTotals = {};
+            let totalCurrentMonthExpense = 0;
+
+            transactions.forEach(t => {
+                const tDate = new Date(t.date + 'T00:00:00');
+                const m = tDate.getMonth();
+                const y = tDate.getFullYear();
+                const amt = Number(t.amount);
+
+                if (y === currentYear) {
+                    if (t.type === 'income') {
+                        incomeByMonth[m] += amt;
+                    } else {
+                        expenseByMonth[m] += amt;
+                    }
+                }
+
+                if (t.type === 'expense' && m === currentMonth && y === currentYear) {
+                    catTotals[t.category] = (catTotals[t.category] || 0) + amt;
+                    totalCurrentMonthExpense += amt;
+                }
+            });
+
+            document.getElementById('doughnut-center-total').textContent = formatValue(totalCurrentMonthExpense);
+
+            cashFlowChartInstance.data.datasets[0].data = incomeByMonth;
+            cashFlowChartInstance.data.datasets[1].data = expenseByMonth;
+            cashFlowChartInstance.update();
+
+            categoryChartInstance.data.labels = Object.keys(catTotals);
+            categoryChartInstance.data.datasets[0].data = Object.values(catTotals);
+            categoryChartInstance.data.datasets[0].backgroundColor = Object.keys(catTotals).map(c => categoryColors[c] || '#4b5563');
+            categoryChartInstance.update();
+        }
+
+        function openTransactionModal() {
+            const m = document.getElementById('modal-transaction');
+            m.classList.remove('hidden');
+            setTimeout(() => m.classList.remove('opacity-0'), 10);
+        }
+        function closeTransactionModal() {
+            const m = document.getElementById('modal-transaction');
+            m.classList.add('opacity-0');
+            setTimeout(() => m.classList.add('hidden'), 300);
+        }
+        function openSyncModal() {
+            const m = document.getElementById('modal-sync');
+            document.getElementById('sync-step-select').classList.remove('hidden');
+            document.getElementById('sync-step-loading').classList.add('hidden');
+            m.classList.remove('hidden');
+            setTimeout(() => m.classList.remove('opacity-0'), 10);
+        }
+        function closeSyncModal() {
+            const m = document.getElementById('modal-sync');
+            m.classList.add('opacity-0');
+            setTimeout(() => m.classList.add('hidden'), 300);
+        }
+        function simulateBankSync(bank) {
+            document.getElementById('sync-step-select').classList.add('hidden');
+            document.getElementById('sync-step-loading').classList.remove('hidden');
+            document.getElementById('sync-loading-bank').textContent = `Conectando ao ${bank}...`;
+            setTimeout(() => {
+                transactions.push({ id: Date.now().toString(), description: `${bank} - Pix Recebido`, amount: 250.00, type: 'income', category: 'Outros', date: new Date().toISOString().split('T')[0] });
+                saveTransactions();
+                renderApp();
+                closeSyncModal();
+                showToast(`Banco ${bank} sincronizado!`);
+            }, 2000);
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 3000);
+        }
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
 </body>
 </html>
